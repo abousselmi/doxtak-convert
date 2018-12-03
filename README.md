@@ -7,11 +7,7 @@ Converts all files into markdown before the doxtak build.
 You can use it like this:
 
 ``` console
-docker run \
-  -it \
-  --rm \
-  -v /path/to/data:/data \
-  abousselmi/doxtak-convert
+docker run -v /path/to/data:/data abousselmi/doxtak-convert
 ```
 
 ## Build image
