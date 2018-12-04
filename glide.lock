@@ -1,0 +1,15 @@
+hash: fd421a9b995a068825af4849a666d58d8f2bf0364849c92611a02f3c9b1a4056
+updated: 2018-12-04T16:17:26.723232149+01:00
+imports:
+- name: github.com/gorilla/context
+  version: 51ce91d2eaddeca0ef29a71d766bb3634dadf729
+- name: github.com/gorilla/handlers
+  version: 7e0847f9db758cdebd26c149d0ae9d5d0b9c98ce
+- name: github.com/gorilla/mux
+  version: e3702bed27f0d39777b0b37b664b6280e8ef8fbf
+- name: github.com/savaki/swag
+  version: 3a75479e44a3ae7f3a4cc91baa4ad000ac81a8ed
+  subpackages:
+  - endpoint
+  - swagger
+testImports: []
