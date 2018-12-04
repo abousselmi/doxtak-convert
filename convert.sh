@@ -5,12 +5,14 @@
 # Eg. RST -> MD or YML -> MD
 #
 
+echo "******* Start convert"
+
 function log {
-  echo -e "["`date +%D-%X`"] (convert) - $1" > /dev/stdout
+  echo -e `date +%Y/%m/%d\ %X`" (convert) - $1" > /dev/stdout
 }
 
 function logerr {
-  >&2 echo "["`date +%D\-%X`"] (convert) - $1" > /dev/stderr
+  >&2 echo `date +%Y/%m/%d\ %X`" (convert) - $1" > /dev/stderr
 }
 
 # check the setup

@@ -79,7 +79,7 @@ func main() {
 
 func apiWalk(route *mux.Route, router *mux.Router, ancestors []*mux.Route) error {
 	path, err := route.GetPathTemplate()
-	log.Println("[+] route -", path)
+	log.Println("Endpoint", path)
 	return err
 }
 
@@ -103,15 +103,17 @@ func jsonifyConvertResponse(timestamp time.Time, duration float64, id int) ([]by
 func convertHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 
+		log.Println("Convert number", hits, " since last start.")
+
 		// fire up convert script
 		start := time.Now()
-		convert := exec.Command("/bin/bash", convertBinPath)
-		err := convert.Run()
+		out, err := exec.Command("/bin/bash", convertBinPath).CombinedOutput()
+		elapsed := time.Since(start)
+		log.Println(string(out))
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
-		elapsed := time.Since(start)
 
 		// return operation status
 		js, err := jsonifyConvertResponse(start, elapsed.Seconds(), hits)
@@ -133,6 +135,7 @@ func convertHandler(w http.ResponseWriter, r *http.Request) {
 func pingHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
 		//return pong
+		log.Println("Got PING, returning PONG")
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("pong\n"))
 	}

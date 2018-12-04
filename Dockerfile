@@ -1,3 +1,18 @@
+FROM golang:1.11-stretch
+
+COPY [ "convert-api.go", "glide.yaml", "glide.lock", "/go/src/github.com/abousselmi/doxtak-convert/" ]
+
+WORKDIR /go/src/github.com/abousselmi/doxtak-convert/
+
+RUN apt-get update \
+  && apt-get install -y ca-certificates curl \
+  && cd /tmp && curl -L https://glide.sh/get -O -J && sh ./get \
+  && rm /tmp/get && rm -rf /var/lib/apt/lists/*
+
+RUN glide install
+
+RUN CGO_ENABLED=0 go build -a -installsuffix nocgo -o /go/bin/convert-api .
+
 FROM java:8-jre
 
 LABEL maintainer="https://github.com/abousselmi"
@@ -19,7 +34,16 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update \
 
 COPY [ "./config.properties", "$S2M_CLI_PATH/config.properties" ]
 COPY [ "./convert.sh", "/" ]
+COPY --from=0 /go/bin/convert-api /convert-api
 
 VOLUME [ "/data" ]
 
-ENTRYPOINT [ "/convert.sh" ]
+EXPOSE 9000
+
+HEALTHCHECK --interval=15s \
+            --timeout=3s \
+            --start-period=5s \
+            --retries=5 \
+            CMD [[ $(curl -s -o /dev/null -w "%{http_code}" "http://localhost:9000/api/v1/swagger.json") -eq 200 ]]
+
+CMD [ "/convert-api" ]
