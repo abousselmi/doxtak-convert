@@ -103,7 +103,7 @@ func jsonifyConvertResponse(timestamp time.Time, duration float64, id int) ([]by
 func convertHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "POST" {
 
-		log.Println("Convert number", hits, " since last start.")
+		log.Println("Convert number", hits, "since last start.")
 
 		// fire up convert script
 		start := time.Now()
